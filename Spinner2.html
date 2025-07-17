@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Spinner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .controls {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .input-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        input[type="text"], input[type="file"] {
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .spinner-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto 30px;
+        }
+
+        .spinner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            border: 3px solid rgba(255,255,255,0.3);
+            transition: transform 4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 0 30px rgba(255,255,255,0.2);
+        }
+
+        .spinner.spinning {
+            transform: rotate(1800deg);
+        }
+
+        .pearl {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 1px 3px rgba(255,255,255,0.3);
+            border: 2px solid rgba(255,255,255,0.4);
+            transition: all 0.3s ease;
+        }
+
+        .pearl:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .center-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 20px;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 3px solid #fff;
+        }
+
+        .student-list {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .student-list h3 {
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .student-list ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .student-list li {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .pointer {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 25px solid #ff6b6b;
+            z-index: 10;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .selected {
+            animation: pulse 0.6s ease-in-out 3;
+            background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%) !important;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6) !important;
+        }
+
+        .result {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Student Spinner</h1>
+        
+        <div class="controls">
+            <div class="input-section">
+                <input type="text" id="studentInput" placeholder="Enter student names (comma-separated)">
+                <button onclick="addStudentsFromText()">Add Students</button>
+            </div>
+            
+            <div class="input-section">
+                <input type="file" id="csvFile" accept=".csv,.txt" onchange="loadCSV()">
+                <button onclick="useDemoList()">Use Demo List</button>
+                <button onclick="clearStudents()">Clear All</button>
+            </div>
+            
+            <button id="spinButton" onclick="spinWheel()" disabled>🎯 SPIN THE WHEEL!</button>
+        </div>
+
+        <div class="spinner-container">
+            <div class="pointer"></div>
+            <div class="spinner" id="spinner">
+                <div class="center-display" id="centerDisplay">
+                    Add Students<br>to Begin
+                </div>
+            </div>
+        </div>
+
+        <div id="result" class="result" style="display: none;"></div>
+
+        <div class="student-list" id="studentList" style="display: none;">
+            <h3>Current Students:</h3>
+            <ul id="studentUL"></ul>
+        </div>
+    </div>
+
+    <script>
+        let students = [];
+        let isSpinning = false;
+
+        // Create spinning sound using Web Audio API
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function createSpinSound() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(220, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(440, audioContext.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+
+        function createSelectSound() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(523, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(659, audioContext.currentTime + 0.1);
+            oscillator.frequency.setValueAtTime(784, audioContext.currentTime + 0.2);
+            
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
+
+        function processNames(names) {
+            const processed = [];
+            const firstNames = {};
+            
+            names.forEach(name => {
+                const parts = name.trim().split(/\s+/);
+                const firstName = parts[0];
+                const lastName = parts[1] || '';
+                
+                if (!firstNames[firstName]) {
+                    firstNames[firstName] = [];
+                }
+                firstNames[firstName].push({
+                    full: name.trim(),
+                    first: firstName,
+                    last: lastName
+                });
+            });
+            
+            Object.keys(firstNames).forEach(firstName => {
+                const people = firstNames[firstName];
+                if (people.length === 1) {
+                    processed.push({
+                        display: firstName,
+                        full: people[0].full,
+                        initials: firstName.substring(0, 2).toUpperCase()
+                    });
+                } else {
+                    people.forEach(person => {
+                        const lastInitial = person.last ? person.last.charAt(0).toUpperCase() : '';
+                        processed.push({
+                            display: `${firstName} ${lastInitial}`,
+                            full: person.full,
+                            initials: `${firstName.charAt(0)}${lastInitial}`.toUpperCase()
+                        });
+                    });
+                }
+            });
+            
+            return processed;
+        }
+
+        function addStudentsFromText() {
+            const input = document.getElementById('studentInput');
+            const names = input.value.split(',').filter(name => name.trim());
+            
+            if (names.length === 0) {
+                alert('Please enter at least one student name');
+                return;
+            }
+            
+            const processed = processNames(names);
+            students = [...students, ...processed];
+            input.value = '';
+            updateDisplay();
+        }
+
+        function loadCSV() {
+            const file = document.getElementById('csvFile').files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const csv = e.target.result;
+                const lines = csv.split('\n');
+                const names = [];
+                
+                lines.forEach(line => {
+                    const columns = line.split(',');
+                    columns.forEach(col => {
+                        const name = col.trim();
+                        if (name) names.push(name);
+                    });
+                });
+                
+                if (names.length > 0) {
+                    const processed = processNames(names);
+                    students = [...students, ...processed];
+                    updateDisplay();
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function useDemoList() {
+            const demoNames = [
+                'Emma Johnson', 'Liam Smith', 'Olivia Brown', 'Noah Davis', 'Ava Wilson',
+                'Ethan Miller', 'Sophia Garcia', 'Mason Rodriguez', 'Isabella Martinez', 'William Anderson',
+                'Mia Taylor', 'James Thomas', 'Charlotte Jackson', 'Benjamin White', 'Amelia Harris',
+                'Lucas Martin', 'Harper Thompson', 'Henry Garcia', 'Evelyn Lewis', 'Alexander Lee'
+            ];
+            
+            const processed = processNames(demoNames);
+            students = [...students, ...processed];
+            updateDisplay();
+        }
+
+        function clearStudents() {
+            students = [];
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            const spinner = document.getElementById('spinner');
+            const centerDisplay = document.getElementById('centerDisplay');
+            const spinButton = document.getElementById('spinButton');
+            const studentList = document.getElementById('studentList');
+            const studentUL = document.getElementById('studentUL');
+            
+            // Clear existing pearls
+            const existingPearls = spinner.querySelectorAll('.pearl');
+            existingPearls.forEach(pearl => pearl.remove());
+            
+            if (students.length === 0) {
+                centerDisplay.innerHTML = 'Add Students<br>to Begin';
+                spinButton.disabled = true;
+                studentList.style.display = 'none';
+                return;
+            }
+            
+            centerDisplay.innerHTML = `${students.length}<br>Students`;
+            spinButton.disabled = false;
+            
+            // Create pearls around the circle
+            const radius = 170;
+            const centerX = 200;
+            const centerY = 200;
+            
+            students.forEach((student, index) => {
+                const angle = (index * 360 / students.length) * Math.PI / 180;
+                const x = centerX + radius * Math.cos(angle - Math.PI / 2);
+                const y = centerY + radius * Math.sin(angle - Math.PI / 2);
+                
+                const pearl = document.createElement('div');
+                pearl.className = 'pearl';
+                pearl.style.left = `${x - 30}px`;
+                pearl.style.top = `${y - 30}px`;
+                pearl.textContent = student.initials;
+                pearl.title = student.display;
+                
+                spinner.appendChild(pearl);
+            });
+            
+            // Update student list
+            studentUL.innerHTML = '';
+            students.forEach(student => {
+                const li = document.createElement('li');
+                li.textContent = student.display;
+                studentUL.appendChild(li);
+            });
+            studentList.style.display = 'block';
+        }
+
+        function spinWheel() {
+            if (isSpinning || students.length === 0) return;
+            
+            isSpinning = true;
+            const spinner = document.getElementById('spinner');
+            const spinButton = document.getElementById('spinButton');
+            const result = document.getElementById('result');
+            const centerDisplay = document.getElementById('centerDisplay');
+            
+            spinButton.disabled = true;
+            result.style.display = 'none';
+            
+            // Play spinning sound
+            createSpinSound();
+            
+            // Reset spinner rotation
+            spinner.style.transition = 'none';
+            spinner.style.transform = 'rotate(0deg)';
+            
+            setTimeout(() => {
+                spinner.style.transition = 'transform 4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                
+                // Calculate random rotation
+                const spins = 5 + Math.random() * 5; // 5-10 full rotations
+                const finalAngle = Math.random() * 360;
+                const totalRotation = spins * 360 + finalAngle;
+                
+                spinner.style.transform = `rotate(${totalRotation}deg)`;
+                
+                // Calculate which student is selected
+                const segmentAngle = 360 / students.length;
+                const adjustedAngle = (360 - (finalAngle % 360)) % 360;
+                const selectedIndex = Math.floor(adjustedAngle / segmentAngle);
+                const selectedStudent = students[selectedIndex];
+                
+                setTimeout(() => {
+                    // Highlight selected pearl
+                    const pearls = spinner.querySelectorAll('.pearl');
+                    pearls[selectedIndex].classList.add('selected');
+                    
+                    // Play selection sound
+                    createSelectSound();
+                    
+                    // Update center display
+                    centerDisplay.innerHTML = `Selected:<br>${selectedStudent.display}`;
+                    
+                    // Show result
+                    result.innerHTML = `🎉 Selected: <strong>${selectedStudent.display}</strong> 🎉`;
+                    result.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        pearls[selectedIndex].classList.remove('selected');
+                        centerDisplay.innerHTML = `${students.length}<br>Students`;
+                        isSpinning = false;
+                        spinButton.disabled = false;
+                    }, 3000);
+                }, 4000);
+            }, 50);
+        }
+
+        // Initialize audio context on first user interaction
+        document.addEventListener('click', function initAudio() {
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            document.removeEventListener('click', initAudio);
+        });
+    </script>
+</body>
+</html>
