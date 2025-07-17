@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Student Necklace Spinner</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    user-select: none;
+  }
+  h1 {
+    margin-bottom: 10px;
+    color: #333;
+  }
+  #spinner-container {
+    position: relative;
+    margin: 30px 0;
+    width: 350px;
+    height: 350px;
+  }
+  #spinner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+    cursor: pointer;
+    background: #fff;
+    box-shadow: 0 0 30px rgba(0,0,0,0.1);
+  }
+  .pearl {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(145deg, #f8f9fa, #e1e5ea);
+    border-radius: 50%;
+    box-shadow:
+      inset 2px 2px 5px #fff,
+      inset -2px -2px 5px #c1c5ca,
+      3px 3px 8px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: #2a2a2a;
+    user-select: none;
+    pointer-events: none;
+  }
+  #selected-name {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 800;
+    font-size: 22px;
+    color: #2a2a2a;
+    min-width: 150px;
+    text-align: center;
+    user-select: none;
+  }
+  #controls {
+    max-width: 400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  textarea {
+    width: 100%;
+    height: 100px;
+    resize: vertical;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-family: monospace;
+  }
+  button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:hover:not(:disabled) {
+    background-color: #357abd;
+  }
+  button:disabled {
+    background-color: #999;
+    cursor: default;
+  }
+  #spin-btn {
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Student Necklace Spinner</h1>
+
+<div id="spinner-container">
+  <div id="spinner">
+    <div id="selected-name">Spin to select</div>
+  </div>
+</div>
+
+<div id="controls">
+  <label for="names-input">Enter student names (comma-separated):</label>
+  <textarea id="names-input" placeholder="e.g. Alice Smith, Bob Jones, Charlie Brown"></textarea>
+  <button id="load-demo">Use Demo List</button>
+  <button id="spin-btn" disabled>Spin!</button>
+</div>
+
+<audio id="spin-sound" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
+<script>
+(() => {
+  const spinner = document.getElementById('spinner');
+  const selectedNameElem = document.getElementById('selected-name');
+  const namesInput = document.getElementById('names-input');
+  const spinBtn = document.getElementById('spin-btn');
+  const loadDemoBtn = document.getElementById('load-demo');
+  const spinSound = document.getElementById('spin-sound');
+
+  let students = [];
+  let pearls = [];
+  let isSpinning = false;
+
+  // Demo list of students
+  const demoNames = [
+    "Alice Smith",
+    "Bob Jones",
+    "Charlie Brown",
+    "Alice Johnson",
+    "David Lee",
+    "Emily Clark",
+    "Frank Miller",
+    "Grace Kim",
+    "Henry Adams",
+    "Ivy White"
+  ];
+
+  // Utility to get initials with logic:
+  // If first names clash, add last initial
+  function generateInitials(names) {
+    const firstNameCount = {};
+    names.forEach(name => {
+      const first = name.split(' ')[0].trim();
+      firstNameCount[first] = (firstNameCount[first] || 0) + 1;
+    });
+
+    return names.map(name => {
+      const parts = name.trim().split(' ');
+      const first = parts[0];
+      if (firstNameCount[first] > 1 && parts.length > 1) {
+        return first[0].toUpperCase() + parts[1][0].toUpperCase();
+      } else {
+        return first[0].toUpperCase();
+      }
+    });
+  }
+
+  // Clear pearls from spinner
+  function clearPearls() {
+    pearls.forEach(p => p.remove());
+    pearls = [];
+  }
+
+  // Create pearls arranged in a circle necklace style
+  function createPearls(initials) {
+    clearPearls();
+    const n = initials.length;
+    const radius = 130; // radius of circle
+    const centerX = spinner.clientWidth / 2;
+    const centerY = spinner.clientHeight / 2;
+
+    initials.forEach((initial, i) => {
+      const angle = (2 * Math.PI / n) * i - Math.PI / 2; // start from top
+      const x = centerX + radius * Math.cos(angle) - 25; // pearl size 50, so -25 for center
+      const y = centerY + radius * Math.sin(angle) - 25;
+
+      const pearl = document.createElement('div');
+      pearl.className = 'pearl';
+      pearl.style.left = `${x}px`;
+      pearl.style.top = `${y}px`;
+      pearl.textContent = initial;
+      spinner.appendChild(pearl);
+      pearls.push(pearl);
+    });
+  }
+
+  // Parse input names from textarea
+  function parseNames(text) {
+    const names = text.split(',')
+      .map(s => s.trim())
+      .filter(s => s.length > 0);
+    return names;
+  }
+
+  // Load names and update spinner pearls
+  function loadNames(namesList) {
+    if (namesList.length < 2) {
+      alert('Please enter at least two student names.');
+      return false;
+    }
+    students = namesList;
+    const initials = generateInitials(students);
+    createPearls(initials);
+    selectedNameElem.textContent = 'Spin to select';
+    spinBtn.disabled = false;
+    spinner.style.transform = 'rotate(0deg)';
+    return true;
+  }
+
+  // Spin logic
+  function spin() {
+    if (isSpinning) return;
+    isSpinning = true;
+    spinBtn.disabled = true;
+    selectedNameElem.textContent = 'Spinning...';
+
+    // Play spin sound
+    spinSound.currentTime = 0;
+    spinSound.play();
+
+    const n = students.length;
+    // Calculate random spin degrees - multiple rounds + target angle
+    const rounds = Math.floor(Math.random() * 3) + 4; // 4 to 6 rounds
+    // Pick a random index
+    const selectedIndex = Math.floor(Math.random() * n);
+    // Angle per pearl
+    const anglePerPearl = 360 / n;
+
+    // To align selected pearl at top, spinner should rotate so that
+    // selected pearl aligns at -90deg (top), so offset it.
+    const finalAngle = rounds * 360 + (360 - (selectedIndex * anglePerPearl)) - 90;
+
+    spinner.style.transition = 'transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
+    spinner.style.transform = `rotate(${finalAngle}deg)`;
+
+    spinner.addEventListener('transitionend', () => {
+      isSpinning = false;
+      spinBtn.disabled = false;
+      selectedNameElem.textContent = students[selectedIndex];
+      spinner.style.transition = 'none';
+      // Reset rotation angle so it doesn't keep growing infinitely
+      spinner.style.transform = `rotate(${(360 - (selectedIndex * anglePerPearl)) - 90}deg)`;
+    }, { once: true });
+  }
+
+  // Event listeners
+  spinBtn.addEventListener('click', spin);
+
+  loadDemoBtn.addEventListener('click', () => {
+    namesInput.value = demoNames.join(', ');
+    if(loadNames(demoNames)) {
+      spinBtn.disabled = false;
+    }
+  });
+
+  namesInput.addEventListener('input', () => {
+    spinBtn.disabled = true;
+  });
+
+  namesInput.addEventListener('change', () => {
+    const namesList = parseNames(namesInput.value);
+    if(loadNames(namesList)) {
+      spinBtn.disabled = false;
+    }
+  });
+
+  // Initialize with demo list on load
+  loadDemoBtn.click();
+
+})();
+</script>
+
+</body>
+</html>
