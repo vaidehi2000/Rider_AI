@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 1 Robotics Study Guide</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #e74c3c;
+            font-size: 1.8em;
+            margin-top: 20px;
+        }
+        h3 {
+            color: #3498db;
+            font-size: 1.4em;
+        }
+        p {
+            font-size: 1.1em;
+        }
+        .fun-fact {
+            background: #e8f6f3;
+            padding: 15px;
+            border-left: 5px solid #1abc9c;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-list li {
+            background: #ecf0f1;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .task-list input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .resource-box {
+            background: #f9e79f;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .resource-box a {
+            color: #8e44ad;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .resource-box a:hover {
+            text-decoration: underline;
+        }
+        .robot-image {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .tip {
+            background: #d5d8dc;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Week 1 Robotics Study Guide: Welcome to Robotics! 🚀</h1>
+        <p>Hello, future roboticists! This guide is your go-to resource for Week 1 of our robotics class. You’ll learn what robots are, explore cool tools like ROS and TurtleBot3, and set up your computer for awesome simulations. No coding experience? No problem! Let’s dive into the exciting world of robotics with fun facts, clear steps, and hands-on tasks!</p>
+
+        <img src="https://emanual.robotis.com/assets/images/platform/turtlebot3/overview/turtlebot3_burger.png" alt="TurtleBot3 Robot" class="robot-image">
+
+        <h2>🎯 Learning Goals</h2>
+        <p>By the end of this week, you’ll:</p>
+        <ul>
+            <li>Understand what makes a robot a robot (hint: it’s not just a fancy gadget!).</li>
+            <li>Learn the Sense-Plan-Act cycle that robots use to “think” and move.</li>
+            <li>Discover the tools we’ll use: ROS, Gazebo, and TurtleBot3.</li>
+            <li>Set up your computer to run robot simulations.</li>
+            <li>Play with a virtual TurtleBot3 in Gazebo—no coding required yet!</li>
+        </ul>
+
+        <div class="fun-fact">
+            <h3>🤖 Fun Fact</h3>
+            <p>The word “robot” comes from a 1920 play called <em>R.U.R. (Rossum’s Universal Robots)</em>, where it meant “forced labor.” Today, robots like TurtleBot3 help us explore Mars or clean our homes!</p>
+        </div>
+
+        <h2>📚 Key Concepts</h2>
+        <h3>1. What is a Robot?</h3>
+        <p>A robot is a machine that can perform tasks on its own (or with some help) using:</p>
+        <ul>
+            <li><strong>Sensors:</strong> Like eyes or ears (e.g., cameras, LIDAR) to sense the world.</li>
+            <li><strong>Actuators:</strong> Like muscles (e.g., motors, wheels) to move or act.</li>
+            <li><strong>Control System:</strong> The “brain” that decides what to do (e.g., a computer program).</li>
+        </ul>
+
+        <h3>2. Sense-Plan-Act Cycle</h3>
+        <p>Robots follow this cycle to work smart:</p>
+        <ul>
+            <li><strong>Sense:</strong> Detect the environment (e.g., TurtleBot3’s LIDAR sees walls).</li>
+            <li><strong>Plan:</strong> Decide what to do (e.g., turn left to avoid an obstacle).</li>
+            <li><strong>Act:</strong> Move or perform the task (e.g., drive forward).</li>
+        </ul>
+        <img src="https://roboticsed.ri.cmu.edu/wp-content/uploads/2022/08/Sense-Plan-Act.png" alt="Sense-Plan-Act Cycle" class="robot-image">
+
+        <div class="fun-fact">
+            <h3>🌟 Did You Know?</h3>
+            <p>NASA’s Perseverance rover uses the Sense-Plan-Act cycle to explore Mars, taking pictures and searching for signs of ancient life!</p>
+        </div>
+
+        <h3>3. Tools We’ll Use</h3>
+        <ul>
+            <li><strong>ROS (Robot Operating System):</strong> The “brain” software that helps robots communicate and process data.</li>
+            <li><strong>Gazebo:</strong> A simulator where we’ll test virtual robots like TurtleBot3.</li>
+            <li><strong>TurtleBot3:</strong> A small, friendly robot we’ll control in simulations.</li>
+        </ul>
+
+        <h2>🛠️ Hands-On Tasks</h2>
+        <p>Let’s get started with some fun activities! Check off each task as you complete it.</p>
+        <ul class="task-list">
+            <li><input type="checkbox"> Watch the video <a href="https://www.youtube.com/watch?v=ygf5CPEKSG0">What is a robot?</a> to learn the basics.</li>
+            <li><input type="checkbox"> Discuss with a classmate: “What’s a robot you’ve seen in movies or real life?” (Think R2-D2 or a robot vacuum!)</li>
+            <li><input type="checkbox"> Install ROS and Gazebo using the <a href="http://wiki.ros.org/ROS/Installation">ROS Installation Guide</a>.</li>
+            <li><input type="checkbox"> Follow the <a href="https://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/">TurtleBot3 Simulation Guide</a> to set up the simulator.</li>
+            <li><input type="checkbox"> Launch TurtleBot3 in Gazebo and use keyboard controls to move it around in TurtleBot3 World.</li>
+        </ul>
+
+        <div class="tip">
+            <p><strong>Tip:</strong> Installing ROS is like giving your computer a “robot brain.” If you run into issues, ask during office hours or email your instructor!</p>
+        </div>
+
+        <h2>📖 Resources</h2>
+        <div class="resource-box">
+            <p><strong>Video:</strong> <a href="https://www.youtube.com/watch?v=ygf5CPEKSG0">What is a robot?</a> by Teach Kids Robotics</p>
+            <p><strong>Slides:</strong> <a href="https://docs.google.com/presentation/d/11zLKiF-_-ei1lBhS7e_e4HkbgsTcsEh0VDH_aMK1zz4/edit?usp=sharing">Teach Kids Robotics Lesson 1</a></p>
+            <p><strong>Handout:</strong> <a href="https://roboticsed.ri.cmu.edu/wp-content/uploads/2022/08/101-Student-Handout.pdf">CMU Robotics Lesson 101</a></p>
+            <p><strong>Setup Guides:</strong> <a href="http://wiki.ros.org/ROS/Installation">ROS Installation</a> | <a href="https://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/">TurtleBot3 Simulation</a></p>
+        </div>
+
+        <h2>✨ Study Tips</h2>
+        <ul>
+            <li><strong>Watch the Video First:</strong> It’s a fun way to grasp the basics!</li>
+            <li><strong>Take Notes:</strong> Jot down what sensors, actuators, and the Sense-Plan-Act cycle mean.</li>
+            <li><strong>Explore Gazebo:</strong> Play with TurtleBot3’s movements to get comfortable with the simulator.</li>
+            <li><strong>Ask Questions:</strong> No question is too small—reach out to your instructor or classmates.</li>
+            <li><strong>Stay Curious:</strong> Think about how robots like TurtleBot3 could solve real-world problems!</li>
+        </ul>
+
+        <div class="fun-fact">
+            <h3>🤖 Cool Fact</h3>
+            <p>Sophia, a humanoid robot, is the world’s first robot citizen! She uses cameras and AI to “see” and talk to people.</p>
+        </div>
+
+        <h2>✅ Checklist for Success</h2>
+        <ul class="task-list">
+            <li><input type="checkbox"> I watched the “What is a robot?” video.</li>
+            <li><input type="checkbox"> I can explain what a robot is (sensors, actuators, control system).</li>
+            <li><input type="checkbox"> I understand the Sense-Plan-Act cycle.</li>
+            <li><input type="checkbox"> I installed ROS and Gazebo successfully.</li>
+            <li><input type="checkbox"> I moved TurtleBot3 in Gazebo using keyboard controls.</li>
+        </ul>
+
+        <footer>
+            <p>Ready to become a robotics superstar? Keep this guide handy, and let’s build some awesome robots together! 🌟</p>
+        </footer>
+    </div>
+</body>
+</html>
