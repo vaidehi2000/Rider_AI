@@ -3,81 +3,369 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Index</title>
+    <title>Project Portfolio - Interactive Index</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            background-color: #f5f5f5;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
         }
         
         .container {
-            background-color: white;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
         
-        h1 {
-            color: #333;
+        body.dark-mode .container {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+        }
+        
+        .header {
             text-align: center;
             margin-bottom: 40px;
-            font-size: 2.5em;
+            position: relative;
         }
         
-        .nav-links {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: center;
+        .header h1 {
+            font-size: 3em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            animation: fadeInUp 1s ease;
         }
         
-        .nav-link {
-            display: block;
-            padding: 15px 30px;
-            background-color: #007bff;
+        .header p {
+            font-size: 1.2em;
+            color: #666;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        body.dark-mode .header p {
+            color: #ccc;
+        }
+        
+        .dark-mode-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: transform 0.3s ease;
+        }
+        
+        .dark-mode-toggle:hover {
+            transform: scale(1.05);
+        }
+        
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            font-size: 1.1em;
-            min-width: 200px;
+            color: inherit;
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        body.dark-mode .project-card {
+            background: #2c3e50;
+            color: white;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .project-preview {
+            height: 200px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: #999;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-preview.robotics {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        }
+        
+        .project-preview.spinner {
+            background: linear-gradient(45deg, #54a0ff, #2e86de);
+        }
+        
+        .project-preview.spinner2 {
+            background: linear-gradient(45deg, #5f27cd, #341f97);
+        }
+        
+        .project-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .project-card:hover .project-preview::before {
+            opacity: 1;
+        }
+        
+        .project-info {
+            padding: 25px;
+        }
+        
+        .project-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        body.dark-mode .project-title {
+            color: white;
+        }
+        
+        .project-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        body.dark-mode .project-description {
+            color: #ccc;
+        }
+        
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9em;
+            color: #999;
+        }
+        
+        body.dark-mode .project-meta {
+            color: #aaa;
+        }
+        
+        .project-status {
+            background: #28a745;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+        }
+        
+        .project-status.experimental {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        
+        body.dark-mode .stats {
+            border-top-color: #555;
+        }
+        
+        .stat-item {
             text-align: center;
         }
         
-        .nav-link:hover {
-            background-color: #0056b3;
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
         }
         
-        .nav-link:active {
-            transform: translateY(1px);
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
         }
         
-        @media (max-width: 600px) {
+        body.dark-mode .stat-label {
+            color: #ccc;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .spinning-icon {
+            animation: spin 2s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
             .container {
                 padding: 20px;
             }
             
-            h1 {
+            .header h1 {
                 font-size: 2em;
             }
             
-            .nav-link {
-                min-width: 150px;
+            .project-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 20px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Project Index</h1>
-        <nav class="nav-links">
-            <a href="Robotics.html" class="nav-link">Robotics</a>
-            <a href="Spinner.html" class="nav-link">Spinner</a>
-            <a href="Spinner2.html" class="nav-link">Spinner 2</a>
-        </nav>
+        <div class="header">
+            <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+            <h1>Project Portfolio</h1>
+            <p>Explore my interactive projects and experiments</p>
+        </div>
+        
+        <div class="project-grid">
+            <a href="Robotics.html" class="project-card">
+                <div class="project-preview robotics">
+                    🤖
+                </div>
+                <div class="project-info">
+                    <h3 class="project-title">Robotics</h3>
+                    <p class="project-description">
+                        Explore robotic simulations, controls, and interactive demonstrations. 
+                        Features advanced animations and user interactions.
+                    </p>
+                    <div class="project-meta">
+                        <span>Updated: Today</span>
+                        <span class="project-status">Complete</span>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="Spinner.html" class="project-card">
+                <div class="project-preview spinner">
+                    <span class="spinning-icon">⚙️</span>
+                </div>
+                <div class="project-info">
+                    <h3 class="project-title">Spinner</h3>
+                    <p class="project-description">
+                        Interactive spinning animations and controls. 
+                        Experiment with different speeds, colors, and patterns.
+                    </p>
+                    <div class="project-meta">
+                        <span>Updated: Today</span>
+                        <span class="project-status">Complete</span>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="Spinner2.html" class="project-card">
+                <div class="project-preview spinner2">
+                    <span class="spinning-icon">🌀</span>
+                </div>
+                <div class="project-info">
+                    <h3 class="project-title">Spinner 2</h3>
+                    <p class="project-description">
+                        Advanced spinner with enhanced features and customization options. 
+                        Includes new effects and interaction modes.
+                    </p>
+                    <div class="project-meta">
+                        <span>Updated: Today</span>
+                        <span class="project-status experimental">Experimental</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Projects</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Interactive</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">2</div>
+                <div class="stat-label">Categories</div>
+            </div>
+        </div>
     </div>
+    
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const button = document.querySelector('.dark-mode-toggle');
+            const isDark = document.body.classList.contains('dark-mode');
+            button.textContent = isDark ? '☀️ Light Mode' : '🌙 Dark Mode';
+        }
+        
+        // Add entrance animations to cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.project-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.2}s`;
+            });
+        });
+    </script>
 </body>
 </html>
