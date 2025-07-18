@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hands-On Exploration: TurtleBot3 Simulator Demo</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #e74c3c;
+            font-size: 1.8em;
+            margin-top: 20px;
+        }
+        h3 {
+            color: #3498db;
+            font-size: 1.4em;
+        }
+        p {
+            font-size: 1.1em;
+        }
+        .step {
+            background: #e8f6f3;
+            padding: 15px;
+            border-left: 5px solid #1abc9c;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .image {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        .tip {
+            background: #d5d8dc;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .submission-box {
+            background: #f9e79f;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .submission-box a {
+            color: #8e44ad;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .submission-box a:hover {
+            text-decoration: underline;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-list li {
+            background: #ecf0f1;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .task-list input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Hands-On Exploration: TurtleBot3 Simulator Demo 🚀</h1>
+        <p>Welcome to your first hands-on robotics adventure! In this activity, you’ll launch the TurtleBot3 robot in the Gazebo simulator, move it around using keyboard controls, and write a short (100–150 word) description of what you observe. No coding is needed—just follow these steps, have fun exploring, and share your thoughts. This task is worth 10 points and will get you ready for more robotics fun!</p>
+
+        <img src="https://emanual.robotis.com/assets/images/platform/turtlebot3/simulation/turtlebot3_world.png" alt="TurtleBot3 in Gazebo" class="image">
+
+        <h2>🎯 Objectives</h2>
+        <ul>
+            <li>Get familiar with the Gazebo simulator and TurtleBot3.</li>
+            <li>Use keyboard controls to move the robot and observe its behavior.</li>
+            <li>Identify robot components like wheels and sensors in action.</li>
+            <li>Write a clear description of your observations to reflect on your experience.</li>
+        </ul>
+
+        <h2>🛠️ Step-by-Step Instructions</h2>
+        <div class="step">
+            <h3>Step 1: Ensure ROS and Gazebo Are Installed</h3>
+            <p>Before you start, make sure you’ve installed ROS (Humble or Noetic) and Gazebo, as shown in class. Follow the <a href="http://wiki.ros.org/ROS/Installation">ROS Installation Guide</a> and <a href="https://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/">TurtleBot3 Simulation Guide</a> if you haven’t.</p>
+            <div class="tip">
+                <p><strong>Tip:</strong> Run <code>roscore</code> in a terminal to check if ROS is working. If you see errors, check the troubleshooting guide or ask your instructor!</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Launch TurtleBot3 in Gazebo</h3>
+            <p>Open a terminal and run these commands:</p>
+            <ol>
+                <li><code>export TURTLEBOT3_MODEL=burger</code></li>
+                <li><code>roslaunch turtlebot3_gazebo turtlebot3_world.launch</code></li>
+            </ol>
+            <p>This will open Gazebo with TurtleBot3 in a simple environment called TurtleBot3 World.</p>
+            <img src="https://emanual.robotis.com/assets/images/platform/turtlebot3/simulation/turtlebot3_world.png" alt="TurtleBot3 World" class="image">
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Move TurtleBot3 with Keyboard Controls</h3>
+            <p>Open a new terminal and run:</p>
+            <code>roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch</code>
+            <p>Use these keys to move the robot:</p>
+            <ul>
+                <li><strong>W:</strong> Move forward</li>
+                <li><strong>S:</strong> Move backward</li>
+                <li><strong>A:</strong> Turn left</li>
+                <li><strong>D:</strong> Turn right</li>
+                <li><strong>X:</strong> Stop</li>
+            </ul>
+            <p>Try moving the robot around obstacles, changing views in Gazebo, and observing how it behaves.</p>
+            <div class="tip">
+                <p><strong>Tip:</strong> If the robot doesn’t move, ensure both terminals are active and check for error messages.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Observe and Take Notes</h3>
+            <p>As you move TurtleBot3, notice:</p>
+            <ul>
+                <li>How does the robot respond to your commands?</li>
+                <li>What sensors (e.g., LIDAR, camera) do you see in action?</li>
+                <li>Does the robot interact with obstacles (e.g., walls, objects)?</li>
+                <li>Any cool or unexpected behaviors?</li>
+            </ul>
+            <p>Jot down your observations to use in your write-up.</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 5: Write Your Description</h3>
+            <p>Write a short (100–150 word) description of your experience. Include:</p>
+            <ul>
+                <li>What you did (e.g., moved the robot forward, turned it).</li>
+                <li>What you observed (e.g., how the robot moved, any sensor data).</li>
+                <li>Any challenges or surprises (e.g., “It bumped into a wall!”).</li>
+            </ul>
+            <p>Example: “I launched TurtleBot3 in Gazebo and used the ‘W’ key to move it forward. The robot’s wheels spun, and I saw LIDAR lines scanning the walls. When I pressed ‘A,’ it turned left smoothly but bumped into a box. The simulator showed a 3D view, which was cool! It was tricky to avoid obstacles at first, but I got the hang of it.”</p>
+        </div>
+
+        <h2>📤 Submission</h2>
+        <div class="submission-box">
+            <p>Submit your write-up (100–150 words) and an optional screenshot of TurtleBot3 in Gazebo via your class portal (e.g., Canvas) or email. Include your name and a title like “TurtleBot3 Simulator Demo.”</p>
+            <p><strong>Deadline:</strong> End of Week 1</p>
+            <p><strong>Resources:</strong></p>
+            <ul>
+                <li><a href="http://wiki.ros.org/ROS/Installation">ROS Installation Guide</a></li>
+                <li><a href="https://emanual.robotis.com/docs/en/platform/turtlebot3/simulation/">TurtleBot3 Simulation Guide</a></li>
+                <li><a href="https://gazebosim.org/docs/harmonic/tutorials/">Gazebo Tutorials</a></li>
+            </ul>
+        </div>
+
+        <h2>✅ Checklist</h2>
+        <ul class="task-list">
+            <li><input type="checkbox"> Installed ROS and Gazebo.</li>
+            <li><input type="checkbox"> Launched TurtleBot3 in Gazebo.</li>
+            <li><input type="checkbox"> Moved the robot using keyboard controls.</li>
+            <li><input type="checkbox"> Took notes on observations.</li>
+            <li><input type="checkbox"> Wrote a 100–150 word description.</li>
+            <li><input type="checkbox"> Submitted write-up (and optional screenshot).</li>
+        </ul>
+
+        <h2>✨ Tips for Success</h2>
+        <ul>
+            <li><strong>Explore Freely:</strong> Try different movements (e.g., circles, zigzags) to see how TurtleBot3 behaves.</li>
+            <li><strong>Take Your Time:</strong> Spend 10–15 minutes playing with the simulator to get comfortable.</li>
+            <li><strong>Use Resources:</strong> Refer to the TurtleBot3 Simulation Guide if you get stuck.</li>
+            <li><strong>Ask for Help:</strong> Reach out to your instructor or classmates during office hours.</li>
+            <li><strong>Have Fun:</strong> This is your first robot adventure—enjoy it!</li>
+        </ul>
+
+        <footer>
+            <p>You’re on your way to becoming a robotics pro! Have fun exploring TurtleBot3, and we can’t wait to read about your adventure! 🌟</p>
+        </footer>
+    </div>
+</body>
+</html>
